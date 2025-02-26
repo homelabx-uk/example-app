@@ -1,0 +1,12 @@
+on:
+  workflow_call:
+    inputs:
+      image:
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - run: echo ${{ inputs.image }}
