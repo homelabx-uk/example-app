@@ -6,6 +6,8 @@ const containerId = crypto.randomUUID();
 const app = new Hono();
 app.get("/", (c) => c.text(`I am example app!\n${containerId}`));
 
-serve({ fetch: app.fetch, port: 3000 }, ({ port }) => {
-  console.log(`server listening on http://localhost:${port}`);
+const server = serve({ fetch: app.fetch, port: 3000 });
+
+process.on("SIGTERM", function onSigterm() {
+  server.close(() => process.exit());
 });
