@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: example-app
-          image: "ghcr.io/homelabx-uk/example-app:b4882e11c03f74828d80ba3b2d225d3e86215e67-13549352542"
+          image: $IMAGE
 
 ---
 apiVersion: v1
