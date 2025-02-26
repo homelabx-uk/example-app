@@ -48,4 +48,4 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
-      - run: helm upgrade --install --create-namespace -n ${{ github.repository }} --set image=${{ env.IMAGE }} ${{ github.repository }} ./chart
+      - run: helm upgrade --install --create-namespace -n ${{ github.event.repository.name }} --set image="${{ env.IMAGE }}" ${{ github.event.repository.name }} ./chart
