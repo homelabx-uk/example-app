@@ -8,6 +8,6 @@ app.get("/", (c) => c.text(`I am example app!\n${containerId}`));
 
 const server = serve({ fetch: app.fetch, port: 3000 });
 
-process.on("SIGTERM", function onSigterm() {
+process.on("SIGTERM", () => {
   server.close(() => process.exit());
 });

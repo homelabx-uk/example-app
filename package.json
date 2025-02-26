@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "example-app",
+  "name": "app",
   "version": "0.1.0",
   "type": "module",
   "scripts": {
