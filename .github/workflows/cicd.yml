@@ -7,7 +7,7 @@ env:
   IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}-${{ github.run_id }}
 
 jobs:
-  check:
+  check-types:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -16,6 +16,14 @@ jobs:
           node-version: 22.x
       - run: npm ci
       - run: npm run check:types
+  check-format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+      - run: npm ci
       - run: npm run check:format
   containerize:
     runs-on: ubuntu-latest
