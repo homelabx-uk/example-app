@@ -11,24 +11,6 @@ on:
       - closed
 
 jobs:
-  check-types:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22.x
-      - run: npm ci
-      - run: npm run check:types
-  check-format:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22.x
-      - run: npm ci
-      - run: npm run check:format
   containerize:
     if: ${{ github.event.action != 'closed' }}
     uses: ./.github/workflows/.containerize.yml
