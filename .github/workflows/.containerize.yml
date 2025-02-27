@@ -1,11 +1,11 @@
-env:
-  IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}-${{ github.run_id }}
-
 on:
   workflow_call:
     outputs:
       image:
         value: ${{ env.IMAGE }}
+
+env:
+  IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}-${{ github.run_id }}
 
 jobs:
   containerize:
