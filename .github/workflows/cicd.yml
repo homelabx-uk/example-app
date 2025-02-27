@@ -2,6 +2,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 env:
   IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}-${{ github.run_id }}
