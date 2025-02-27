@@ -6,6 +6,9 @@ spec:
   replicas: 2
   strategy:
     type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0 # Always keep existing pods running
+      maxSurge: 1 # Add one new pod before removing an old one
   selector:
     matchLabels:
       app: "{{ .Release.Name }}"
