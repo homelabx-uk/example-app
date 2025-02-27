@@ -15,6 +15,5 @@ jobs:
     needs: containerize
     uses: ./.github/workflows/.deploy.yml
     with:
-      environment: prod
-      appName: ${{ github.event.repository.name }}
+      tier: prod
       image: ${{ needs.containerize.outputs.image }}

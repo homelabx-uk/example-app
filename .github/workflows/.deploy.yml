@@ -1,22 +1,37 @@
 on:
   workflow_call:
     inputs:
-      environment:
+      tier:
         type: string
         required: true
-      appName:
+        description: defines which environment variables and secrets to use
+      releaseSuffix:
         type: string
-        required: true
+        description: suffix used for the helm release
       image:
         type: string
         required: true
+        description: docker image to be deployed
+
+env:
+  RELEASE: ${{ inputs.releaseSuffix && format('{0}-{1}', github.event.repository.name, inputs.releaseSuffix) || github.event.repository.name }}
 
 jobs:
   deploy:
     runs-on: self-hosted
     environment:
-      name: ${{ inputs.environment }}
-      url: https://${{ inputs.appName }}.homelabx.uk
+      name: ${{ inputs.tier == 'review' && format('pr-{0}', github.event.pull_request.number) || inputs.tier }}
+      url: https://${{ env.RELEASE }}.homelabx.uk
     steps:
       - uses: actions/checkout@v4
-      - run: helm upgrade --install --atomic --timeout 300s --create-namespace -n ${{ github.event.repository.name }} --set image=${{ inputs.image }} ${{ inputs.appName }} ./chart
+      - run: echo TODO use helm values for tier ${{ inputs.tier }} #TODO remove this line
+      - run: >
+          helm upgrade
+          --install
+          --atomic
+          --timeout 300s
+          --create-namespace
+          -n ${{ github.event.repository.name }}
+          --set image=${{ inputs.image }}
+          ${{ env.RELEASE }}
+          ./chart
