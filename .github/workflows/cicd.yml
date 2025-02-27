@@ -1,8 +1,14 @@
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
-  workflow_dispatch:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - closed
 
 env:
   IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}-${{ github.run_id }}
@@ -44,7 +50,23 @@ jobs:
           push: true
           tags: ${{ env.IMAGE }}
           platforms: linux/amd64,linux/arm64
-  deploy:
+  deploy-review:
+    if: ${{ github.event.action != 'closed' }}
+    needs: containerize
+    runs-on: self-hosted
+    environment:
+      name: review/pr-${{ github.event.pull_request.number }}
+      url: https://example-app-pr-${{ github.event.pull_request.number }}.homelabx.uk
+    steps:
+      - uses: actions/checkout@v4
+      - run: helm upgrade --install --atomic --timeout 300s --create-namespace -n ${{ github.event.repository.name }} --set image="${{ env.IMAGE }}" ${{ github.event.repository.name }}-pr-${{ github.event.pull_request.number }} ./chart
+  destroy-review:
+    if: ${{ github.event.action == 'closed' }}
+    runs-on: self-hosted
+    steps:
+      - run: helm uninstall --wait ${{ github.event.repository.name }}-pr-${{ github.event.pull_request.number }}
+  deploy-prod:
+    if: ${{ github.ref_name == 'main' }}
     needs: containerize
     runs-on: self-hosted
     environment:
