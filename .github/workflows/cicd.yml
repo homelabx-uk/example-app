@@ -47,6 +47,9 @@ jobs:
   deploy:
     needs: containerize
     runs-on: self-hosted
+    environment:
+      name: prod
+      url: https://example-app.homelabx.uk
     steps:
       - uses: actions/checkout@v4
       - run: helm upgrade --install --atomic --timeout 300s --create-namespace -n ${{ github.event.repository.name }} --set image="${{ env.IMAGE }}" ${{ github.event.repository.name }} ./chart
