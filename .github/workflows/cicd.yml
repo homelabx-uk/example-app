@@ -32,6 +32,9 @@ jobs:
   containerize:
     if: ${{ github.event.action != 'closed' }}
     uses: ./.github/workflows/.containerize.yml
+    permissions:
+      contents: read
+      packages: write
   deploy-review:
     if: ${{ github.event.action != 'closed' && github.ref_name != 'main' }}
     needs: containerize
