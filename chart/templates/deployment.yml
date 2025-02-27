@@ -20,6 +20,11 @@ spec:
       containers:
         - name: app
           image: "{{ .Values.image }}"
+          envFrom:
+            - configMapRef:
+                name: "{{ .Release.Name }}"
+              secretRef:
+                name: "{{ .Release.Name }}"
           readinessProbe:
             httpGet:
               path: /
