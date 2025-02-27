@@ -51,11 +51,11 @@ jobs:
           tags: ${{ env.IMAGE }}
           platforms: linux/amd64,linux/arm64
   deploy-review:
-    if: ${{ github.event.action != 'closed' }}
+    if: ${{ github.event.action != 'closed' && github.ref_name != 'main' }}
     needs: containerize
     runs-on: self-hosted
     environment:
-      name: review/pr-${{ github.event.pull_request.number }}
+      name: pr-${{ github.event.pull_request.number }}
       url: https://example-app-pr-${{ github.event.pull_request.number }}.homelabx.uk
     steps:
       - uses: actions/checkout@v4
@@ -64,7 +64,7 @@ jobs:
     if: ${{ github.event.action == 'closed' }}
     runs-on: self-hosted
     steps:
-      - run: helm uninstall --wait ${{ github.event.repository.name }}-pr-${{ github.event.pull_request.number }}
+      - run: helm uninstall --wait -n ${{ github.event.repository.name }} ${{ github.event.repository.name }}-pr-${{ github.event.pull_request.number }}
   deploy-prod:
     if: ${{ github.ref_name == 'main' }}
     needs: containerize
