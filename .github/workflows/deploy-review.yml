@@ -9,10 +9,8 @@ jobs:
       packages: write
   deploy-review:
     needs: containerize
-    runs-on: self-hosted
-    environment:
-      name: pr-${{ github.event.pull_request.number }}
-      url: https://${{ github.event.repository.name }}-pr-${{ github.event.pull_request.number }}.homelabx.uk
-    steps:
-      - uses: actions/checkout@v4
-      - run: helm upgrade --install --atomic --timeout 300s --create-namespace -n ${{ github.event.repository.name }} --set image="${{ needs.containerize.outputs.image }}" ${{ github.event.repository.name }}-pr-${{ github.event.pull_request.number }} ./chart
+    uses: ./.github/workflows/.deploy.yml
+    with:
+      environment: pr-${{ github.event.pull_request.number }}
+      appName: ${{ github.event.repository.name }}-pr-${{ github.event.pull_request.number }}
+      image: ${{ needs.containerize.outputs.image }}

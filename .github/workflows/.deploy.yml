@@ -1,0 +1,22 @@
+on:
+  workflow_call:
+    inputs:
+      environment:
+        type: string
+        required: true
+      appName:
+        type: string
+        required: true
+      image:
+        type: string
+        required: true
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    environment:
+      name: ${{ inputs.environment }}
+      url: https://${{ inputs.appName }}.homelabx.uk
+    steps:
+      - uses: actions/checkout@v4
+      - run: helm upgrade --install --atomic --timeout 300s --create-namespace -n ${{ github.event.repository.name }} --set image=${{ inputs.image }} ${{ inputs.appName }} ./chart

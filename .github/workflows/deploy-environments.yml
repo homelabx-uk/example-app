@@ -13,10 +13,8 @@ jobs:
       packages: write
   deploy-prod:
     needs: containerize
-    runs-on: self-hosted
-    environment:
-      name: prod
-      url: https://${{ github.event.repository.name }}.homelabx.uk
-    steps:
-      - uses: actions/checkout@v4
-      - run: helm upgrade --install --atomic --timeout 300s --create-namespace -n ${{ github.event.repository.name }} --set image="${{ needs.containerize.outputs.image }}" ${{ github.event.repository.name }} ./chart
+    uses: ./.github/workflows/.deploy.yml
+    with:
+      environment: prod
+      appName: ${{ github.event.repository.name }}
+      image: ${{ needs.containerize.outputs.image }}
