@@ -10,9 +10,6 @@ on:
       - synchronize
       - closed
 
-env:
-  IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}-${{ github.run_id }}
-
 jobs:
   check-types:
     runs-on: ubuntu-latest
@@ -33,23 +30,8 @@ jobs:
       - run: npm ci
       - run: npm run check:format
   containerize:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-    steps:
-      - uses: actions/checkout@v4
-      - uses: docker/setup-buildx-action@v3
-      - uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: docker/build-push-action@v6
-        with:
-          push: true
-          tags: ${{ env.IMAGE }}
-          platforms: linux/amd64,linux/arm64
+    if: ${{ github.event.action != 'closed' }}
+    uses: ./.github/workflows/.containerize.yml
   deploy-review:
     if: ${{ github.event.action != 'closed' && github.ref_name != 'main' }}
     needs: containerize
@@ -59,7 +41,7 @@ jobs:
       url: https://example-app-pr-${{ github.event.pull_request.number }}.homelabx.uk
     steps:
       - uses: actions/checkout@v4
-      - run: helm upgrade --install --atomic --timeout 300s --create-namespace -n ${{ github.event.repository.name }} --set image="${{ env.IMAGE }}" ${{ github.event.repository.name }}-pr-${{ github.event.pull_request.number }} ./chart
+      - run: helm upgrade --install --atomic --timeout 300s --create-namespace -n ${{ github.event.repository.name }} --set image="${{ needs.containerize.outputs.image }}" ${{ github.event.repository.name }}-pr-${{ github.event.pull_request.number }} ./chart
   destroy-review:
     if: ${{ github.event.action == 'closed' }}
     runs-on: self-hosted
@@ -74,4 +56,4 @@ jobs:
       url: https://example-app.homelabx.uk
     steps:
       - uses: actions/checkout@v4
-      - run: helm upgrade --install --atomic --timeout 300s --create-namespace -n ${{ github.event.repository.name }} --set image="${{ env.IMAGE }}" ${{ github.event.repository.name }} ./chart
+      - run: helm upgrade --install --atomic --timeout 300s --create-namespace -n ${{ github.event.repository.name }} --set image="${{ needs.containerize.outputs.image }}" ${{ github.event.repository.name }} ./chart
