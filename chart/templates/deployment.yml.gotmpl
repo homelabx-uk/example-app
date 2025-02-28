@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: "{{ .Release.Name }}"
+  name: {{ .Release.Name }}
 spec:
-  replicas: 2
+  replicas: {{ .Values.replicas }}
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -11,20 +11,20 @@ spec:
       maxSurge: 1 # Add one new pod before removing an old one
   selector:
     matchLabels:
-      app: "{{ .Release.Name }}"
+      app: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: "{{ .Release.Name }}"
+        app: {{ .Release.Name }}
     spec:
       containers:
         - name: app
-          image: "{{ .Values.image }}"
+          image: {{ .Values.image }}
           envFrom:
             - configMapRef:
-                name: "{{ .Release.Name }}"
+                name: {{ .Release.Name }}
             - secretRef:
-                name: "{{ .Release.Name }}"
+                name: {{ .Release.Name }}
           readinessProbe:
             httpGet:
               path: /

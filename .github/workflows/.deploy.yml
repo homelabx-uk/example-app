@@ -30,10 +30,10 @@ jobs:
       url: https://${{ env.INGRESS_HOST }}
     steps:
       - uses: actions/checkout@v4
-      - run: echo TODO use helm values for tier ${{ inputs.tier }}.yml #TODO remove this line
       - run: >
           helm upgrade ${{ github.event.repository.name }}-${{ inputs.environment }} ./chart
           --install --atomic --timeout 300s
           --create-namespace -n ${{ github.event.repository.name }}
+          -f ./chart/values/${{ inputs.tier }}.yml
           --set image=${{ inputs.image }}
           --set ingress.host=${{ env.INGRESS_HOST }}

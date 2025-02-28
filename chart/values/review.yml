@@ -1,0 +1,4 @@
+replicas: 1
+
+env:
+  GREETING: Hi

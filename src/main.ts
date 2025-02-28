@@ -4,7 +4,7 @@ import { Hono } from "hono";
 const containerId = crypto.randomUUID();
 
 const app = new Hono();
-app.get("/", (c) => c.text(`Helo I am example app 🥺\n${containerId}\nenv: ${JSON.stringify(process.env, null, 2)}`));
+app.get("/", (c) => c.text(`${process.env.GREETING} I am example app 🥺\n${containerId}`));
 
 const server = serve({ fetch: app.fetch, port: 3000 });
 

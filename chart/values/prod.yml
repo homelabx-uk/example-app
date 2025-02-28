@@ -1,0 +1,4 @@
+replicas: 2
+
+env:
+  GREETING: Heloo

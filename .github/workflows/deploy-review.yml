@@ -12,5 +12,7 @@ jobs:
     uses: ./.github/workflows/.deploy.yml
     with:
       environment: pr-${{ github.event.pull_request.number }}
-      tier: review # change this to "prod" for example to test the review app with prod config
+      # change the tier to "prod" for example to test the review app with prod config
+      # BE CAREFUL WHEN DOING SO!
+      tier: review
       image: ${{ needs.containerize.outputs.image }}
