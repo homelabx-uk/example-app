@@ -5,6 +5,9 @@ on:
       - main
       # add branches or tags if needed (depends on the branching model)
 
+concurrency:
+  group: ${{ github.workflow }}
+
 jobs:
   containerize:
     uses: ./.github/workflows/.containerize.yml

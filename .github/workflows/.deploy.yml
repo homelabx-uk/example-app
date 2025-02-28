@@ -22,9 +22,6 @@ env:
 jobs:
   deploy:
     runs-on: self-hosted
-    concurrency:
-      group: ${{ github.workflow }}-${{ inputs.environment }}
-      cancel-in-progress: false
     environment:
       name: ${{ inputs.tier }}
       url: https://${{ env.INGRESS_HOST }}
