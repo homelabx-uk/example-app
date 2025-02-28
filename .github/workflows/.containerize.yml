@@ -17,11 +17,16 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/metadata-actio@v5
+        id: meta
+        with:
+          images: ghcr.io/${{ github.repository }}
       - uses: docker/build-push-action@v6
         id: build
         with:
           push: true
           tags: ghcr.io/${{ github.repository }}:latest
+          labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/arm64
           cache-from: type=gha
           cache-to: type=gha,mode=max
