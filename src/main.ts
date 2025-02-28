@@ -1,6 +1,6 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
-import { gitSha } from "@/version";
+import { gitSha } from "./git-sha";
 
 const containerId = crypto.randomUUID();
 
