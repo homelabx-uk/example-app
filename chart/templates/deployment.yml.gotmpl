@@ -2,6 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name }}
+  labels:
+    gitRevision: {{ .Values.git.revision | quote }}
+    gitVersion: {{ .Values.git.version | quote }}
 spec:
   replicas: {{ .Values.replicas }}
   strategy:

@@ -34,5 +34,7 @@ jobs:
           -f ./chart/values/${{ inputs.tier }}.yml
           --set image=${{ inputs.image }}
           --set ingress.host=${{ env.INGRESS_HOST }}
+          --set git.revision="${{ github.event.pull_request.head.sha || github.sha }}"
+          --set git.version="${{ github.run_id }}"
           --set secret.GREETEE="${{ secrets.GREETEE }}"
           # add more secrets if needed

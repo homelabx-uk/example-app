@@ -3,6 +3,8 @@ kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}
 data:
+  GIT_REVISION: {{ .Values.git.revision | quote }}
+  GIT_VERSION: {{ .Values.git.version | quote }}
   {{- range $key, $value := .Values.env }}
   {{ $key }}: {{ $value | quote }}
   {{- end }}
