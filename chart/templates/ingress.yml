@@ -4,7 +4,7 @@ metadata:
   name: "{{ .Release.Name }}"
 spec:
   rules:
-    - host: "{{ .Release.Name }}.homelabx.uk"
+    - host: "{{ .Values.ingress.url }}.homelabx.uk"
       http:
         paths:
           - path: /

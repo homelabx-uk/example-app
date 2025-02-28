@@ -11,6 +11,5 @@ jobs:
     needs: containerize
     uses: ./.github/workflows/.deploy.yml
     with:
-      tier: review # change the tier temporarily to "prod" if you want to test a review app with prod config
-      releaseSuffix: pr-${{ github.event.pull_request.number }}
+      tier: review
       image: ${{ needs.containerize.outputs.image }}

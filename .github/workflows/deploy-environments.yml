@@ -12,7 +12,9 @@ jobs:
       contents: read
       packages: write
   deploy-prod:
-    needs: containerize
+    needs:
+      - containerize
+      # add a dependency on deploy-dev or deploy-staging, if you want to introduce a dedicated dev or staging env
     uses: ./.github/workflows/.deploy.yml
     with:
       tier: prod
