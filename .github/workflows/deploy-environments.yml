@@ -16,6 +16,7 @@ jobs:
       - containerize
       # add a dependency on deploy-dev or deploy-staging, if you want to introduce a dedicated dev or staging env
     uses: ./.github/workflows/.deploy.yml
+    secrets: inherit
     with:
       environment: prod
       tier: prod
