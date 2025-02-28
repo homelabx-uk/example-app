@@ -36,4 +36,4 @@ jobs:
           --install --atomic --timeout 300s
           --create-namespace -n ${{ github.event.repository.name }}
           --set image=${{ inputs.image }}
-          --set ingress.host=${{ jobs.deploy.environment.url }}
+          --set ingress.host=${{ env.INGRESS_HOST }}
