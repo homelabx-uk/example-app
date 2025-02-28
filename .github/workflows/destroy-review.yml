@@ -7,4 +7,7 @@ jobs:
   destroy-review:
     runs-on: self-hosted
     steps:
-      - run: helm uninstall --wait -n ${{ github.event.repository.name }} ${{ github.event.repository.name }}-pr-${{ github.event.pull_request.number }}
+      - run: >
+          helm uninstall ${{ github.event.repository.name }}-pr-${{ github.event.pull_request.number }}
+          --wait
+          -n ${{ github.event.repository.name }}

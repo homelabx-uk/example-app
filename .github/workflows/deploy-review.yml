@@ -12,4 +12,5 @@ jobs:
     uses: ./.github/workflows/.deploy.yml
     with:
       tier: review
+      environment: pr-${{ github.event.pull_request.number }}
       image: ${{ needs.containerize.outputs.image }}

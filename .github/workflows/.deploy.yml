@@ -4,32 +4,36 @@ on:
       tier:
         type: string
         required: true
+        description: defines which values.yml is applied
+      environment:
+        type: string
+        required: true
         description: |
-          defines which values.yml is applied.
-          is also used to compute the name of the github environment and helm release name
+          github environment for overriding secrets
+          also used as a suffix to the helm release
       image:
         type: string
         required: true
         description: docker image to be deployed
 
 env:
-  ENVIRONMENT: ${{ inputs.tier == 'review' && format('pr-{0}', github.event.pull_request.number) || inputs.tier }}
+  INGRESS_HOST: ${{ format(inputs.environment == 'prod' && '{0}' || '{0}-{1}', github.event.repository.name, inputs.environment) }}
 
 jobs:
   deploy:
     runs-on: self-hosted
     concurrency:
-      group: ${{ github.workflow }}-${{ env.ENVIRONMENT }}
+      group: ${{ github.workflow }}-${{ inputs.environment }}
       cancel-in-progress: true
     environment:
-      name: ${{ env.ENVIRONMENT }}
-      url: https://${{ github.event.repository.name }}-${{ env.ENVIRONMENT }}.homelabx.uk
+      name: ${{ inputs.environment }}
+      url: https://${{ github.event.repository.name }}-${{ job.environment }}.homelabx.uk
     steps:
       - uses: actions/checkout@v4
       - run: echo TODO use helm values for tier ${{ inputs.tier }}.yml #TODO remove this line
       - run: >
-          helm upgrade ${{ github.event.repository.name }}-${{ env.ENVIRONMENT }} ./chart
+          helm upgrade ${{ github.event.repository.name }}-${{ inputs.environment }} ./chart
           --install --atomic --timeout 300s
           --create-namespace -n ${{ github.event.repository.name }}
           --set image=${{ inputs.image }}
-          --set ingress.url=${{ jobs.deploy.environment.url }}
+          --set ingress.host=${{ jobs.deploy.environment.url }}

@@ -18,4 +18,5 @@ jobs:
     uses: ./.github/workflows/.deploy.yml
     with:
       tier: prod
+      environment: prod
       image: ${{ needs.containerize.outputs.image }}
