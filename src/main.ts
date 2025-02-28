@@ -1,12 +1,13 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
-import { gitSha } from "./git-sha";
 
 const containerId = crypto.randomUUID();
 
 const app = new Hono();
 app.get("/", (c) =>
-  c.text(`${process.env.GREETING} ${process.env.GREETEE}. I am example app 🥺\n${containerId}\ngitSha: ${gitSha}`),
+  c.text(
+    `${process.env.GREETING} ${process.env.GREETEE}. I am example app 🥺\n${containerId}\ngitSha: ${process.env.gitSha ?? "n/a 😟"}`,
+  ),
 );
 
 const server = serve({ fetch: app.fetch, port: 3000 });
