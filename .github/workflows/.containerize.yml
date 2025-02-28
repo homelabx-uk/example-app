@@ -21,9 +21,7 @@ jobs:
         id: meta
         with:
           images: ghcr.io/${{ github.repository }}
-          tags: |
-            type=sha
-            ${{ github.run_id }}
+          tags: ${{ github.run_id }}
       - uses: docker/build-push-action@v6
         id: build
         with:
