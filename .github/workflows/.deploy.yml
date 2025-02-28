@@ -35,5 +35,6 @@ jobs:
           helm upgrade ${{ github.event.repository.name }}-${{ inputs.environment }} ./chart
           --install --atomic --timeout 300s
           --create-namespace -n ${{ github.event.repository.name }}
+          -f ./chart/values/${{ inputs.tier }}.yml
           --set image=${{ inputs.image }}
           --set ingress.host=${{ env.INGRESS_HOST }}

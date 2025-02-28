@@ -3,4 +3,6 @@ kind: ConfigMap
 metadata:
   name: "{{ .Release.Name }}"
 data:
-  HELLO_VAR: "Hello World"
+  {{- range $key, $value := .Values.env }}
+  {{ $key }}: {{ $value | quote }}
+  {{- end }}

@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: "{{ .Release.Name }}"
 spec:
-  replicas: 2
+  replicas: "{{ .Values.replicas }}"
   strategy:
     type: RollingUpdate
     rollingUpdate:
