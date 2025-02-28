@@ -21,7 +21,7 @@ jobs:
         id: build
         with:
           push: true
-          tags: ghcr.io/${{ github.repository }}:${{ github.run_id }}
+          tags: ghcr.io/${{ github.repository }}:latest
           platforms: linux/arm64
           cache-from: type=gha
           cache-to: type=gha,mode=max
