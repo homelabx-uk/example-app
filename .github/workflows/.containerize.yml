@@ -12,11 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       image: ${{ env.IMAGE }}
-    strategy:
-      matrix:
-        platform:
-          - amd64
-          - arm64
     steps:
       - uses: actions/checkout@v4
       - run: echo 'export const gitSha = "${{ github.sha }}"' > src/version.ts
@@ -30,6 +25,10 @@ jobs:
         with:
           push: true
           tags: ${{ env.IMAGE }}
-          platforms: linux/${{ matrix.platform }}
-          cache-from: type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-${{ matrix.platform }}
-          cache-to: type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-${{ matrix.platform }},mode=max
+          platforms: linux/amd64,linux/arm64
+          cache-from: |
+            type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-linux-amd64
+            type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-linux-arm64
+          cache-to: |
+            type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-linux-amd64,mode=max
+            type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-linux-arm64,mode=max
