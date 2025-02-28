@@ -2,16 +2,13 @@ on:
   workflow_call:
     outputs:
       image:
-        value: ${{ jobs.containerize.outputs.image }}
-
-env:
-  IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}-${{ github.run_id }}
+        value: ghcr.io/${{ github.repository }}:${{ jobs.containerize.outputs.digest }}
 
 jobs:
   containerize:
     runs-on: ubuntu-latest
     outputs:
-      image: ${{ env.IMAGE }}
+      digest: ${{ steps.build.outputs.digest }}
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-buildx-action@v3
@@ -21,9 +18,10 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - uses: docker/build-push-action@v6
+        id: build
         with:
           push: true
-          tags: ${{ env.IMAGE }}
+          tags: ghcr.io/${{ github.repository }}:${{ github.run_id }}
           platforms: linux/arm64
           cache-from: type=gha
           cache-to: type=gha,mode=max
