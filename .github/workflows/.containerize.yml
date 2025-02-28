@@ -23,6 +23,7 @@ jobs:
           images: ghcr.io/${{ github.repository }}
           tags: ${{ github.run_id }}
           labels: |
+            org.opencontainers.image.version=${{ github.run_id }}
             org.opencontainers.image.revision=${{ github.event.pull_request.head.sha || github.sha }}
       - uses: docker/build-push-action@v6
         id: build
