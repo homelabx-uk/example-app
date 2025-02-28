@@ -17,7 +17,7 @@ on:
         description: docker image to be deployed
 
 env:
-  INGRESS_HOST: ${{ format(inputs.environment == 'prod' && '{0}' || '{0}-{1}', github.event.repository.name, inputs.environment) }}
+  INGRESS_HOST: ${{ format(inputs.environment == 'prod' && '{0}' || '{0}-{1}', github.event.repository.name, inputs.environment) }}.homelabx.uk
 
 jobs:
   deploy:
@@ -27,7 +27,7 @@ jobs:
       cancel-in-progress: true
     environment:
       name: ${{ inputs.environment }}
-      url: https://${{ github.event.repository.name }}-${{ job.environment }}.homelabx.uk
+      url: https://${{ env.INGRESS_HOST }}
     steps:
       - uses: actions/checkout@v4
       - run: echo TODO use helm values for tier ${{ inputs.tier }}.yml #TODO remove this line
