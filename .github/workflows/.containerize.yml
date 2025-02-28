@@ -2,7 +2,7 @@ on:
   workflow_call:
     outputs:
       image:
-        value: ghcr.io/${{ github.repository }}:${{ jobs.containerize.outputs.digest }}
+        value: ghcr.io/${{ github.repository }}@${{ jobs.containerize.outputs.digest }}
 
 jobs:
   containerize:
