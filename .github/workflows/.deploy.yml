@@ -4,13 +4,13 @@ on:
       tier:
         type: string
         required: true
-        description: defines which values.yml is applied
+        description: defines which helm values are applied and which github environment is used
       environment:
         type: string
         required: true
         description: |
-          github environment for overriding secrets
-          also used as a suffix to the helm release
+          the name of the deployment used to build the ingress host url.
+          it is also appended as suffix to the helm release name.
       image:
         type: string
         required: true
@@ -26,7 +26,7 @@ jobs:
       group: ${{ github.workflow }}-${{ inputs.environment }}
       cancel-in-progress: true
     environment:
-      name: ${{ inputs.environment }}
+      name: ${{ inputs.tier }}
       url: https://${{ env.INGRESS_HOST }}
     steps:
       - uses: actions/checkout@v4

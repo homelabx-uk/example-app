@@ -17,6 +17,6 @@ jobs:
       # add a dependency on deploy-dev or deploy-staging, if you want to introduce a dedicated dev or staging env
     uses: ./.github/workflows/.deploy.yml
     with:
-      tier: prod
       environment: prod
+      tier: prod
       image: ${{ needs.containerize.outputs.image }}

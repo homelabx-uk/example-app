@@ -11,6 +11,6 @@ jobs:
     needs: containerize
     uses: ./.github/workflows/.deploy.yml
     with:
-      tier: review
       environment: pr-${{ github.event.pull_request.number }}
+      tier: review # change this to "prod" for example to test the review app with prod config
       image: ${{ needs.containerize.outputs.image }}
