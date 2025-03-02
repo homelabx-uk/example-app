@@ -6,7 +6,7 @@ const containerId = crypto.randomUUID();
 const app = new Hono();
 app.get("/", (c) =>
   c.text(
-    `${process.env.GREETING} ${process.env.GREETEE}. I am an example app 🥺\n${containerId}\ngit sha: ${process.env.GIT_REVISION ?? "n/a 😟"}`,
+    `${process.env.GREETING} ${process.env.GREETEE}. I am example app 🥺\n${containerId}\ngit sha: ${process.env.GIT_REVISION ?? "n/a 😟"}`,
   ),
 );
 
